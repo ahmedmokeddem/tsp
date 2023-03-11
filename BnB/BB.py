@@ -1,4 +1,6 @@
 import math 
+import numpy as np
+
 
 #? Fonction qui calcul le cout d'un chemin 
 def calc_path_cost(G,C):
@@ -13,8 +15,19 @@ def calc_path_cost(G,C):
 
 
 #! Fonction d'evaluation basique a ameliorer 
+def evaluate_rest(G,C):
+    n = len(G)
+    tmp = np.full((n,),9999)
+    for i in range(n):
+        for j in range(n):
+                if(i not in C or i == C[-1]) and (j not in C or j == 0 ) and G[i][j] > 0:
+                    if(G[i][j]<tmp[i]):
+                        tmp[i]= G[i][j]
+    tmp.sort()
+    return np.sum(tmp[:n-len(C)+1])
+
 def evaluate(G,C):
-    return calc_path_cost(G,C)  + 0 #* remplacer 0 avec evaluation du cout restant 
+    return calc_path_cost(G,C)  + 0 + evaluate_rest(G,C)  #* remplacer 0 avec evaluation du cout restant 
 
 def BB(G,A,n):
     #? G : le graph 
