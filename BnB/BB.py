@@ -1,4 +1,33 @@
 import math 
+import numpy as np
+from scipy.sparse.csgraph import minimum_spanning_tree
+
+def mst_lower_bound(graph, path):
+    # converting the list to numpy for faster process
+    graph = np.array(graph)
+    path = np.array(path)
+
+    # getting the unvisited nodes
+    unvisited = set(range(len(graph))) - set(path)
+
+    # creating a subgraph with only unvisited nodes
+    subgraph = np.zeros((len(graph), len(graph)))
+    for i in unvisited:
+        for j in unvisited:
+            subgraph[i][j] = graph[i][j]
+
+    # calculating the MST for the subgraph
+    mst = minimum_spanning_tree(subgraph).toarray()
+
+    # Compute the sum of the edge weights in the MST
+    mst_cost = np.sum(mst)
+
+    nearest_dist = np.min(mst[:, path], axis=1)
+    nearest_cost = np.sum(nearest_dist)
+    
+    # Return the estimated cost of the best possible path that can be obtained by extending the partial path
+    return mst_cost + nearest_cost
+
 
 #? Fonction qui calcul le cout d'un chemin 
 def calc_path_cost(G,C):
@@ -14,7 +43,7 @@ def calc_path_cost(G,C):
 
 #! Fonction d'evaluation basique a ameliorer 
 def evaluate(G,C):
-    return calc_path_cost(G,C)  + 0 #* remplacer 0 avec evaluation du cout restant 
+    return calc_path_cost(G,C)  + mst_lower_bound(G,C) 
 
 def BB(G,A,n):
     #? G : le graph 
