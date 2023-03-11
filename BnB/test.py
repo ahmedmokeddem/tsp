@@ -1,36 +1,27 @@
 from BB import *
 import tsplib95
 import time
+import numpy as np
+
+# ? Tested benchmarks : br17.atsp, ft53.atsp, ftv33.atsp, ftv38.atsp
+
+def load_benchmark(file_name):
+    problem = tsplib95.load(file_name)
+    tmp = problem.edge_weights
+    G = []
+    for i in range(len(tmp)):
+        for j in range(len(tmp[i])):
+            G.append(tmp[i][j])
+    G = np.array(G).reshape((-1, problem.dimension))
+    print(f"\nProblem size {problem.dimension}  G.shape={G.shape}  \n G = {G}")
+    return G
 
 
-# #* Chargement du benchmark : br17.atsp avec 17   #
-# #! Mauvais Benchmark 
-# problem = tsplib95.load('br17.atsp')
-# print(problem.render())
-# tmp = problem.edge_weights
-# G = []
-# for i in range(17):
-#     G.append(tmp.pop(0)+tmp.pop(0))
-# print(G)
+G = load_benchmark("./benchmarks/ft53.atsp")
 
-#* Chargement du benchmark : ft53.atsp avec 17  
-problem = tsplib95.load('ft53.atsp')
-print(problem.render())
-tmp = problem.edge_weights
-G = []
-for i in range(17):
-    G.append(tmp.pop(0)+tmp.pop(0)+tmp.pop(0)+tmp.pop(0))
-print(G)
-
-
-# G = [[0,1,0,108],
-#      [5,0,125,20],
-#      [2,11,0,1],
-#      [10,50,20,0],]
-
-n = 12  #* Nombre de sommets 
-A = 0   #* Le point de départ 
+n = 13  # * Nombre de sommets
+A = 0  # * Le point de départ
 start = time.time()
-print(BB(G[:n][:n],A,n))
+print(BB(G[:n][:n], A, n))
 end = time.time()
 print("\nLe temp d'éxecution est : "+str(end - start)+"s")
