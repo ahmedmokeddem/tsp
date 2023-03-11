@@ -27,13 +27,16 @@ def evaluate_rest(G,C):
     return np.sum(tmp[:n-len(C)+1])
 
 def evaluate(G,C):
-    return calc_path_cost(G,C)  + 0 + evaluate_rest(G,C)  #* remplacer 0 avec evaluation du cout restant 
+    return calc_path_cost(G,C)  +  evaluate_rest(G,C)  #* remplacer 0 avec evaluation du cout restant 
 
 def BB(G,A,n):
     #? G : le graph 
     #? A : le point de départ 
     #? n : nb sommets 
     
+    nb_visited = 0
+
+
     P1 = [] #* Pile de parcours
     P2 = [] #* Pile du chemin
     cost_min = math.inf 
@@ -43,6 +46,7 @@ def BB(G,A,n):
 
     while (len(P1) > 0):
         s,d = P1.pop()
+        nb_visited += 1
         while(len(P2) != d-1):
             P2.pop()
         P2.append(s)
@@ -60,6 +64,6 @@ def BB(G,A,n):
                     if(G[s][k]>0):
                         if(k not in P2 or len(P2)==n and k==A):
                             P1.append((k,d+1))
-    return path_min,cost_min
+    return path_min,cost_min,nb_visited
 
 
