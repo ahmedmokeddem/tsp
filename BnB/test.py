@@ -1,5 +1,6 @@
 from BB import *
 import tsplib95
+import time
 
 
 
@@ -19,5 +20,7 @@ print(G)
 
 n = 17  #* Nombre de sommets 
 A = 0   #* Le point de départ 
-
+start = time.time()
 print(BB(G,A,n))
+end = time.time()
+print("\nLe temp d'éxecution est : "+str(end - start)+"s")
