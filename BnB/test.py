@@ -5,6 +5,7 @@ import numpy as np
 
 # ? Tested benchmarks : br17.atsp, ft53.atsp, ftv33.atsp, ftv38.atsp
 
+#? Fonction pour chargement des benchmark de tsplib 
 def load_benchmark(file_name):
     problem = tsplib95.load(file_name)
     tmp = problem.edge_weights
@@ -17,11 +18,12 @@ def load_benchmark(file_name):
     return G
 
 
-G = load_benchmark("./benchmarks/ft53.atsp")
+#? Test 
 
-n = 13  # * Nombre de sommets
-A = 0  # * Le point de départ
+G = load_benchmark("./benchmarks/ft53.atsp")
+n = 10      #* Nombre de sommets a utiliser du graph  G
+A = 0       #* Le point de départ
 start = time.time()
-print(BB(G[:n][:n], A, n))
+print(f" Les résultats de la recherche : {BB(G[:n][:n], A, n)}")
 end = time.time()
-print("\nLe temp d'éxecution est : "+str(end - start)+"s")
+print("\nLe temps d'éxecution est : "+str(end - start)+"s")
