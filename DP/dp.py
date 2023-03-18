@@ -14,15 +14,12 @@ def heldKarp(dists):
     # Calculate the cost of traveling from node 0 to node k for all k
     for k in range(1, n):
         C[(1 << k, k)] = (dists[0][k], 0)
-    # print(C)
     # Calculate the cost of traveling to each subset of nodes of size 2 to n-1
     for subset_size in range(2, n):
         for subset in itertools.combinations(range(1, n), subset_size):
-            # print(subset)
             bits = 0
             for bit in subset:
                 bits |= 1 << bit  # Create a bit mask for the subset of nodes
-            # print(bin(bits))
             # Find the lowest cost to get to this subset
             for k in subset:
                 prev = bits & ~(1 << k)
