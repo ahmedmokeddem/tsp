@@ -67,7 +67,7 @@ def load_benchmark(file_name):
 
 if __name__ == '__main__':
     G = load_benchmark("./benchmarks/ft53.atsp")
-    n = 13      #* Nombre de sommets a utiliser du graph  G
+    n = 20    #* Nombre de sommets a utiliser du graph  G
     start = time.time()
     print(f" Les résultats de la recherche : {heldKarp(G[:n][:n])}")
     end = time.time()

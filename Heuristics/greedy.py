@@ -1,4 +1,3 @@
-import numpy as np
 def is_cycle(edges, x):
     # Create a dictionary of nodes and their parent nodes
     parents = {}
