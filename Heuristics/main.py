@@ -3,17 +3,18 @@ from Benchmark import *
 import time
 import numpy as np
 import sys
-from greedy import greedy
+from greedy import construct_tour
 
 
 if  __name__ == "__main__" :
     
     #? Call this function to test your algorithm on all the tsplib benchmarks 
     caller = lambda G : RAI(G) #* put the call to ur algorithm here
-    callerG = lambda G : greedy(G)
+    callerG = lambda G : construct_tour(G)
     #! This function will test the algorithm only on the benchmarks that contain less than max_nodes node 
     #test_algorithm(caller,max_nodes=200,nb_executions=10,filename='./results/RAI_Benchmarks_MAX_200_nodes.csv') 
-    test_algorithm(callerG,max_nodes=200,nb_executions=10,filename='./results/Greedy_Benchmarks_MAX_200_nodes.csv') 
+    # test_algorithm(callerG,max_nodes=200,nb_executions=10,filename='./results/Greedy_Benchmarks_MAX_200_nodes.csv') 
+    test_algorithm(callerGCI,max_nodes=200,nb_executions=10,filename='./results/CI_Benchmarks_MAX_200_nodes.csv') 
 
     # #! For test : Don't modify the call for G 
     # G,n = load_benchmark("./Benchs/br17.atsp")
