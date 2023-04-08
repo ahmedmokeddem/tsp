@@ -4,17 +4,19 @@ import time
 import numpy as np
 import sys
 from greedy import greedy
-
+from NI import NI
 
 if  __name__ == "__main__" :
     
     #? Call this function to test your algorithm on all the tsplib benchmarks 
     caller = lambda G : RAI(G) #* put the call to ur algorithm here
     callerG = lambda G : greedy(G)
+    callerNI = lambda G : NI(G)
     #! This function will test the algorithm only on the benchmarks that contain less than max_nodes node 
     #test_algorithm(caller,max_nodes=200,nb_executions=10,filename='./results/RAI_Benchmarks_MAX_200_nodes.csv') 
     # test_algorithm(callerG,max_nodes=200,nb_executions=10,filename='./results/Greedy_Benchmarks_MAX_200_nodes.csv') 
-    test_algorithm(callerG,max_nodes=200,nb_executions=10,filename='./results/Greedy_Benchmarks_MAX_200_nodes.csv') 
+    #test_algorithm(callerG,max_nodes=200,nb_executions=10,filename='./results/Greedy_Benchmarks_MAX_200_nodes.csv') 
+    test_algorithm(callerNI,max_nodes=200,nb_executions=10,filename='./results/NI_Benchmarks_MAX_200_nodes.csv') 
 
     # #! For test : Don't modify the call for G 
     # G,n = load_benchmark("./Benchs/br17.atsp")
