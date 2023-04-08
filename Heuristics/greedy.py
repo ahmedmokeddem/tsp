@@ -1,45 +1,53 @@
-import random
+import numpy as np
+def is_cycle(edges, x):
+    # Create a dictionary of nodes and their parent nodes
+    parents = {}
+    for edge in edges:
+        parent, child = edge[:2]
+        if child not in parents:
+            parents[child] = parent
+    #print(parents)
+    # Check if any node has a path of length x to itself
+    for node in parents:
+        path = [node]
+        parent = parents[node]
+        while parent is not None and len(path) < x:
+            if (parent in path): 
+                #print(edges,x,"Reponse => True")
+                return True
+            path.append(parent)
+            parent = parents.get(parent)
+        if parent == node and len(path) == x:
+            #print(edges,x,"Reponse => True")
+            return True
+    #print(edges,x,"Reponse => False")
+    return False
 
-# Cette fonction cherche tous les arcs éligibles (qui peuvent être ajoutés au tour sans créer de cycle ou causer un degré supérieur à 1)
-# Les arcs éligibles sont stockés dans une liste eligible_arcs, puis triés par ordre croissant de longueur
-# Finalement, la fonction retourne une liste de tous les arcs qui ont la même longueur que le plus court arc
-def find_shortest_eligible_arcs(arcs, chosen_arcs, degree, n):
-    eligible_arcs = []
+def greedy(matrix):
+    edges=[]
+    n=len(matrix)
+    in_degree=[0]*n
+    out_degree=[0]*n
+    chosen_edges=[]
+    total_cost=0
     for i in range(n):
-        for j in range(n):
-            if i != j and degree[i] < 2 and degree[j] < 2:
-                arc = (i, j)
-                if arc not in chosen_arcs and arc[::-1] not in chosen_arcs:
-                    eligible_arcs.append(arc)
-    sorted_arcs = sorted(eligible_arcs, key=lambda x: arcs[x[0]][x[1]])
-    return [arc for arc in sorted_arcs if arcs[arc[0]][arc[1]] == arcs[sorted_arcs[0][0]][sorted_arcs[0][1]]]
-# Cette fonction construit un tour hamiltonien en choisissant de manière aléatoire parmi les arcs éligibles les plus courts
-# Elle initialise une liste degree pour stocker le degré entrant et sortant de chaque sommet
-# Elle itère jusqu'à ce que tous les sommets soient visités, en choisissant à chaque fois un arc éligible de manière aléatoire
-# Elle stocke chaque arc choisi dans la liste chosen_arcs
-# Elle met à jour les degrés de chaque sommet en ajoutant 1 pour chaque extrémité de l'arc choisi
-# Elle construit le tour en partant du premier sommet de l'arc initial et en ajoutant les sommets des arcs suivants
-# Elle calcule la longueur totale du tour en sommant les longueurs des arcs choisis
-# Elle retourne le tour et la longueur totale en tant que tuple
-def construct_tour(arcs):
-    n=len(arcs)
-    degree = [0] * n
-    chosen_arcs = []
-    while len(chosen_arcs) < n - 1:
-        eligible_arcs = find_shortest_eligible_arcs(arcs, chosen_arcs, degree, n)
-        if not eligible_arcs:
-            return None,None
-        arc = random.choice(eligible_arcs)
-        chosen_arcs.append(arc)
-        degree[arc[0]] += 1
-        degree[arc[1]] += 1
-    tour = [chosen_arcs[0][0]]
-    total_cost = 0
-    for arc in chosen_arcs:
-        if arc[0] == tour[-1]:
-            tour.append(arc[1])
-        else:
-            tour.append(arc[0])
-        total_cost += arcs[arc[0]][arc[1]]
-    tour.append(chosen_arcs[-1][1])
-    return tour, total_cost
+        for j in range(len(matrix[0])):
+            edges.append((i, j, matrix[i][j]))
+    sorted_edges = sorted(edges, key=lambda x: x[2])
+    #print(sorted_edges)
+    for element in sorted_edges:
+        if (len(chosen_edges)==n):
+            break
+        current_edge=element[:2]
+        temp=chosen_edges+[current_edge]
+        if(in_degree[current_edge[1]]<1 and out_degree[current_edge[0]]<1 and (not (current_edge[1],current_edge[0]) in chosen_edges ) and(not is_cycle(temp,n-1))):
+            chosen_edges.append(current_edge)
+            total_cost+=element[2]
+            in_degree[current_edge[1]]+=1
+            out_degree[current_edge[0]]+=1
+    #print(chosen_edges,total_cost)
+    return chosen_edges,total_cost
+    
+
+
+    
