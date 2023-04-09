@@ -55,12 +55,3 @@ def PPV(G):
                 min_cost = min_cost - G[min_path[-2]][min_path[-1]]
                 min_path.pop()
     return min_path, min_cost
-
-
-G = [[INF, 1, INF, 3],
-     [INF, INF, 1, INF],
-     [3, INF, INF, INF],
-     [INF, 100, INF, INF]]
-
-min_path, min_cost = PPV(G)
-print(f"{min_path} --------- {min_cost}")
