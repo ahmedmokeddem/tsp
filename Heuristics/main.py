@@ -7,6 +7,8 @@ from greedy import construct_tour
 from CI import *
 from kopt import * 
 from LinKernighan import *
+from greedy import greedy
+from NI import NI
 
 if  __name__ == "__main__" :
     
@@ -27,6 +29,13 @@ if  __name__ == "__main__" :
     test_algorithm(callerKopt3,max_nodes=200,nb_executions=10,filename='./results/callerKopt_Benchmarks_MAX_200_nodes_K_3_NI.csv') 
     test_algorithm(callerKopt4,max_nodes=200,nb_executions=10,filename='./results/callerKopt_Benchmarks_MAX_200_nodes_K_4_NI.csv') 
     #test_algorithm(callerLinKernighan,max_nodes=200,nb_executions=10,filename='./results/LinKernighan_Benchmarks_MAX_200_nodes.csv') 
+    callerG = lambda G : greedy(G)
+    callerNI = lambda G : NI(G)
+    #! This function will test the algorithm only on the benchmarks that contain less than max_nodes node 
+    #test_algorithm(caller,max_nodes=200,nb_executions=10,filename='./results/RAI_Benchmarks_MAX_200_nodes.csv') 
+    # test_algorithm(callerG,max_nodes=200,nb_executions=10,filename='./results/Greedy_Benchmarks_MAX_200_nodes.csv') 
+    #test_algorithm(callerG,max_nodes=200,nb_executions=10,filename='./results/Greedy_Benchmarks_MAX_200_nodes.csv') 
+    test_algorithm(callerNI,max_nodes=200,nb_executions=10,filename='./results/NI_Benchmarks_MAX_200_nodes.csv') 
 
     # #! For test : Don't modify the call for G 
     # G,n = load_benchmark("./Benchs/br17.atsp")

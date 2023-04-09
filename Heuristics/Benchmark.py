@@ -73,16 +73,18 @@ def test_algorithm(aglorithm,max_nodes=1000,nb_executions=1,filename='./results/
                 opt_circuit,opt_cost = aglorithm(G)
                 end = time.time()
                 cumul_time += end-start
-                cumul_result += opt_cost
-                if(opt_cost<min_result):
-                    min_result = opt_cost
-                if(opt_cost == int(bench_opt)):
-                    nb_opt+=1
+                if opt_cost is not None:
+                    cumul_result += opt_cost
+                    if(opt_cost<min_result):
+                        min_result = opt_cost
+                    if(opt_cost == int(bench_opt)):
+                        nb_opt+=1
             #* Writing the results to the file 
             avg_result = cumul_result / nb_executions
             avg_time = cumul_time / nb_executions
             avg_perc = abs(bench_opt-avg_result)/bench_opt *100 
             writer.writerow([bench_name,bench_size,bench_opt,avg_result,"%.3f" % avg_perc,min_result,nb_opt,"%.4f" % avg_time])
+            
 
     results.close()
 
