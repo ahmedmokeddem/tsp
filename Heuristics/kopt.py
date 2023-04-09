@@ -1,5 +1,5 @@
 import copy
-from greedy import *
+from CI import *
 
 
 def getCost(graph, path, pathLength):
@@ -19,7 +19,7 @@ def k_opt(graph, path, k, bestCost, pathLength):
 
 
 def mainKOPT(graph, k):
-    initialSolution, initialCost = construct_tour(graph)
+    initialSolution, initialCost = CI(graph)
     pathLength = len(initialSolution)
 
     optimized_solution, newCost = k_opt(
