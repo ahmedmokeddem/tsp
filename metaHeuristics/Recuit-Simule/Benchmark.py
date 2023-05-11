@@ -1,10 +1,8 @@
 import tsplib95
 import time
 import numpy as np
-import sys
 import pandas as pd
 import csv
-import math
 from greedy import greedy
 # ? Tested benchmarks : br17.atsp, ft53.atsp, ftv33.atsp, ftv38.atsp
 from RS import constructPathForGreedy
@@ -86,9 +84,6 @@ def test_algorithm(aglorithm,initial_temperature, cooling_rate, num_iterations, 
             avg_time = cumul_time / nb_executions
             avg_perc = abs(bench_opt-avg_result)/bench_opt *100 
             writer.writerow([bench_name,bench_size,bench_opt,avg_result,"%.3f" % avg_perc,min_result,nb_opt,"%.4f" % avg_time])
-            
+
 
     results.close()
-
-    
-    pass
