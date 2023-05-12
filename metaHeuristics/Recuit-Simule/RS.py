@@ -10,6 +10,7 @@ def tspSimulatedAnnealing(
     initialTemperature: float,
     coolingRate: float,
     nbIterations: int,
+    nbIterationsCooling: int,
     currentPath: List[int],
     currentCost: int,
 ) -> Tuple[List[int], int]:
@@ -23,22 +24,38 @@ def tspSimulatedAnnealing(
 
     for iteration in range(nbIterations):
         path = currentPath.copy()
-        i = random.randint(0, N - 1)
-        j = random.randint(0, N - 1)
-        path[i], path[j] = path[j], path[i]
+        i = random.randint(1, N - 2)
+        j = random.randint(1, N - 2)
+        if i != j :
+            i, j = min(i, j), max(i, j)
+            currNode1, currNode2 = path[i], path[j] 
+            lastCurrNode1, lastCurrNode2 = path[(i-1)%N], path[(j-1)%N]
+            nextCurrNode1, nextCurrNode2 = path[(i+1)%N], path[(j+1)%N]
 
-        newCost = calculatePathDistance(graph, path)
-        delta = newCost - currentCost
+            if i+1 == j :
+                prevScore = graph[lastCurrNode1][currNode1]*(int((i!=0))) + graph[currNode2][nextCurrNode2] + graph[currNode1][currNode2]
+                newScore = graph[lastCurrNode1][currNode2] + graph[currNode1][nextCurrNode2]*(int(N!=j)) + graph[currNode2][currNode1]
+            else:
+                prevScore = graph[lastCurrNode1][currNode1]*(int((i!=0))) + graph[currNode1][nextCurrNode1] + graph[lastCurrNode2][currNode2] + graph[currNode2][nextCurrNode2]
+                newScore = graph[lastCurrNode1][currNode2] + graph[currNode2][nextCurrNode1] + graph[lastCurrNode2][currNode1] + graph[currNode1][nextCurrNode2]*(int(N!=j))
+            
+            path[i], path[j] = path[j], path[i]
+            newCost = currentCost - prevScore + newScore
+            delta = newCost - currentCost
+            if delta < 0 or random.random() < exp(-delta / temperature):
+                currentPath = path
+                currentCost = newCost
 
-        if delta < 0 or random.random() < exp(-delta / temperature):
-            currentPath = path
-            currentCost = newCost
+            if currentCost < bestDistance:
+                bestPath = currentPath.copy()
+                bestDistance = currentCost
+        
+        if not ( (iteration + 1 ) % nbIterationsCooling ):
+            temperature *= coolingRate
 
-        if currentCost < bestDistance:
-            bestPath = currentPath.copy()
-            bestDistance = currentCost
 
-        temperature *= coolingRate
+        # You can add breaking condition here if cond : break
+
 
     return bestPath, bestDistance
 
@@ -77,6 +94,7 @@ if __name__ == "__main__":
     initial_temperature = 80.0
     cooling_rate = 0.9
     num_iterations = 1000
+    num_iterations_for_cooling = 10
 
     initial_solution, intial_cost = greedy(graph)
     initial_solution = constructPathForGreedy(initial_solution)
@@ -88,6 +106,7 @@ if __name__ == "__main__":
         initial_temperature,
         cooling_rate,
         num_iterations,
+        num_iterations_for_cooling,
         initial_solution,
         intial_cost,
     )
