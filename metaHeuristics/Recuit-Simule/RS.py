@@ -3,7 +3,7 @@ import random
 from typing import List, Tuple
 
 from greedy import greedy
-
+import numpy as np
 
 def tspSimulatedAnnealing(
     graph: List[List[int]],
@@ -119,3 +119,84 @@ if __name__ == "__main__":
 
     print("Best Path:", best_path)
     print("Best Distance:", best_distance)
+
+
+
+
+
+
+def tspSimulatedAnnealing_recording_delta(
+    graph: List[List[int]],
+    initialTemperature: float,
+    coolingRate: float,
+    nbIterations: int,
+    nbIterationsCooling: int,
+    currentPath: List[int],
+    currentCost: int,
+) -> Tuple[List[int], int]:
+    
+    N = len(graph)
+
+    bestPath = currentPath.copy()
+    bestDistance = currentCost
+
+    temperature = initialTemperature
+
+    delta_values= []
+
+    for iteration in range(nbIterations):
+        path = currentPath.copy()
+        i = random.randint(0, N - 1) 
+        j = random.randint(0, N - 1)
+        if i != j :
+            i, j = min(i, j), max(i, j)
+            currNode1, currNode2 = path[i], path[j] 
+            lastCurrNode1, lastCurrNode2 = path[(i-1)%N], path[(j-1)%N]
+            nextCurrNode1, nextCurrNode2 = path[(i+1)%N], path[(j+1)%N]
+
+            if i+1 == j :
+                prevScore = graph[lastCurrNode1][currNode1] + graph[currNode2][nextCurrNode2] + graph[currNode1][currNode2]
+                newScore = graph[lastCurrNode1][currNode2] + graph[currNode1][nextCurrNode2] + graph[currNode2][currNode1]
+            elif i == 0 :
+                if j == N-1 :
+                    prevScore =  graph[currNode1][nextCurrNode1] + graph[lastCurrNode2][currNode2] + graph[currNode2][nextCurrNode2]
+                    newScore = graph[currNode2][nextCurrNode1] + graph[lastCurrNode2][currNode1] + graph[currNode1][currNode2] 
+                else:
+                    prevScore = graph[lastCurrNode1][currNode1] + graph[currNode1][nextCurrNode1] + graph[lastCurrNode2][currNode2] + graph[currNode2][nextCurrNode2]
+                    newScore = graph[currNode2][nextCurrNode1] + graph[lastCurrNode1][currNode2] + graph[lastCurrNode2][currNode1] + graph[currNode1][nextCurrNode2]
+            else:
+                prevScore = graph[lastCurrNode1][currNode1] + graph[currNode1][nextCurrNode1] + graph[lastCurrNode2][currNode2] + graph[currNode2][nextCurrNode2]
+                newScore = graph[lastCurrNode1][currNode2] + graph[currNode2][nextCurrNode1] + graph[lastCurrNode2][currNode1] + graph[currNode1][nextCurrNode2]
+            path[i], path[j] = path[j], path[i]
+            newCost = currentCost - prevScore + newScore
+            delta = newCost - currentCost
+            delta_values.append(abs(delta))
+            if delta < 0 or random.random() < exp(-  delta / temperature):
+                currentPath = path
+                currentCost = newCost
+
+            if currentCost < bestDistance:
+                bestPath = currentPath.copy()
+                bestDistance = currentCost
+        
+        if not ( (iteration + 1 ) % nbIterationsCooling ):
+            temperature *= coolingRate
+
+
+        # You can add breaking condition here if cond : break
+
+    #Reading old values 
+
+    # Appending new values
+
+    # Saving the values 
+
+    old_data = np.loadtxt('./results/ouss/delta/delta_distribution.txt', delimiter=',')
+    my_array = np.array(delta_values +old_data.tolist())
+    # my_array = np.array(delta_values)
+
+    print(len(my_array))
+    # Save the array to a CSV file
+    np.savetxt('./results/ouss/delta/delta_distribution.txt', my_array)
+    return bestPath, bestDistance
+
