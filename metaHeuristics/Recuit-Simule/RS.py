@@ -24,8 +24,8 @@ def tspSimulatedAnnealing(
 
     for iteration in range(nbIterations):
         path = currentPath.copy()
-        i = random.randint(1, N - 1) # for now I have fixed the start to avoid recalcualting the whole score (I'll update it tomorrow)
-        j = random.randint(1, N - 1)
+        i = random.randint(0, N - 1) 
+        j = random.randint(0, N - 1)
         if i != j :
             i, j = min(i, j), max(i, j)
             currNode1, currNode2 = path[i], path[j] 
@@ -35,13 +35,18 @@ def tspSimulatedAnnealing(
             if i+1 == j :
                 prevScore = graph[lastCurrNode1][currNode1] + graph[currNode2][nextCurrNode2] + graph[currNode1][currNode2]
                 newScore = graph[lastCurrNode1][currNode2] + graph[currNode1][nextCurrNode2] + graph[currNode2][currNode1]
+            elif i == 0 :
+                if j == N-1 :
+                    prevScore =  graph[currNode1][nextCurrNode1] + graph[lastCurrNode2][currNode2] + graph[currNode2][nextCurrNode2]
+                    newScore = graph[currNode2][nextCurrNode1] + graph[lastCurrNode2][currNode1] + graph[currNode1][currNode2] 
+                else:
+                    prevScore = graph[lastCurrNode1][currNode1] + graph[currNode1][nextCurrNode1] + graph[lastCurrNode2][currNode2] + graph[currNode2][nextCurrNode2]
+                    newScore = graph[currNode2][nextCurrNode1] + graph[lastCurrNode1][currNode2] + graph[lastCurrNode2][currNode1] + graph[currNode1][nextCurrNode2]
             else:
                 prevScore = graph[lastCurrNode1][currNode1] + graph[currNode1][nextCurrNode1] + graph[lastCurrNode2][currNode2] + graph[currNode2][nextCurrNode2]
                 newScore = graph[lastCurrNode1][currNode2] + graph[currNode2][nextCurrNode1] + graph[lastCurrNode2][currNode1] + graph[currNode1][nextCurrNode2]
-            
             path[i], path[j] = path[j], path[i]
             newCost = currentCost - prevScore + newScore
-            tmpcost = calculatePathDistance(graph, path)
             delta = newCost - currentCost
             if delta < 0 or random.random() < exp(-delta / temperature):
                 currentPath = path
@@ -94,7 +99,7 @@ if __name__ == "__main__":
 
     initial_temperature = 80.0
     cooling_rate = 0.9
-    num_iterations = 1000
+    num_iterations = 10000
     num_iterations_for_cooling = 10
 
     initial_solution, intial_cost = greedy(graph)
