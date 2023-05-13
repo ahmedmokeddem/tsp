@@ -99,7 +99,7 @@ if __name__ == "__main__":
 
     initial_temperature = 80.0
     cooling_rate = 0.9
-    num_iterations = 10000
+    num_iterations = 1000
     num_iterations_for_cooling = 10
 
     initial_solution, intial_cost = greedy(graph)
