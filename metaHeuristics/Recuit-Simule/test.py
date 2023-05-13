@@ -17,17 +17,30 @@ def delta_estim():
 if  __name__ == "__main__" :
     benchmark = "ft53"
     p_values = [0.6,0.7,0.75,0.8,0.85,0.9,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99]
-    values_initial_temperature = [-AVG_DELTA/math.log2(p) for p in p_values]
+    values_initial_temperature = [-AVG_DELTA/math.log(p) for p in p_values]
     values_cooling_rate = [0.6,0.7,0.75,0.8,0.85,0.9,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99]
     values_num_iteration =[50000]
     values_nb_iterations_cooling =[5]
     filename = './results/ouss/tmp2_p_16_col_rate_16_50000_iter_nb_col_5.csv'
     test_RS(benchmark,values_initial_temperature, values_cooling_rate, values_num_iteration, values_nb_iterations_cooling ,filename,nb_executions=1)
     # plot_line('NB Iterations','average %',filename,'./results/ouss/plots/test_nb_iter.png')
-    contour_plot('Initiale Temperature','Cooling Rate','average %',filename,'./results/plots/tmp2_p_16_col_rate_16_50000_iter_nb_col_5.png')
+    contour_plot('Initiale Temperature','Cooling Rate','average %',filename,'./results/ouss/plots/tmp2_p_16_col_rate_16_50000_iter_nb_col_5.png')
 
 
 
     # T0 tuniing
     # delta_estim()
+
+
+#? Tunning steps
+# #! Tunning temperature and cooling rate  
+#Ste9 01
+"""
+    p_values = [0.6,0.7,0.75,0.8,0.85,0.9,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99]
+    values_initial_temperature = [-AVG_DELTA/math.log2(p) for p in p_values]
+    values_cooling_rate = [0.6,0.7,0.75,0.8,0.85,0.9,0.91,0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99]
+    values_num_iteration =[50000]
+    values_nb_iterations_cooling =[5]
+
+"""
 
