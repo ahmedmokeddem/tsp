@@ -1,0 +1,2 @@
+Benchmark name,Size,OPT,average result,average %,min result,nb opt,average execution time (s)
+ft53,53,6905,8444.32,22.293,8094,0,0.4965
