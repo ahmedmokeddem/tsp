@@ -1,7 +1,7 @@
 import random 
-from Benchmark import INF
 
 
+INF = 99999999 #* math.inf
 
 
 #? Randomized insertion heuristic 
@@ -44,6 +44,9 @@ def RAI(G,run_times=1):
     opt_circuit = T.copy() #* Best Circuit until now
     opt_cost = cost_T  #* The cost of the best circuit 
     # print(f"Initialisation : {(opt_circuit,opt_cost)}")
+
+    if run_times==0:
+        return opt_circuit,opt_cost
 
     #? Optimization of the initiale circuit 
     
