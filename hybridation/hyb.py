@@ -84,6 +84,8 @@ def RED_DEERS_RS(
     nbIterationsCooling: int,
     selectionAlgorithme,
 ):
+    best_path = []
+    best_cost = INF
     Nb_males = round(N * delta)
     Nb_commanders = round(y * Nb_males)
     Nb_stags = Nb_males - Nb_commanders
@@ -223,10 +225,12 @@ def RED_DEERS_RS(
         population = selectionAlgorithme(population, N)
 
         # print_pop(population)
+        for sol in population:
+            if sol[1] < best_cost:
+                best_path = sol[0].copy()
+                best_cost = sol[1]
 
-    population.sort(key=lambda x: int(x[1]))
-
-    return population[0][0], population[0][1]
+    return best_path, best_cost
 
 
 if __name__ == "__main__":
