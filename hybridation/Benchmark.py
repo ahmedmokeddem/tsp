@@ -61,7 +61,7 @@ def test_algorithm(aglorithm, N,
     results = open(filename, 'w', newline='')
     writer = csv.writer(results)
     headers = ["Benchmark name", "Size", "OPT", "average result",
-               "average %", "min result", "nb opt", "average execution time (s)"]
+               "average %", "min result", "nb opt", "average execution time (s)",]
     writer.writerow(headers)
     results_path = open("path.csv", 'w', newline='')
     writer_path = csv.writer(results_path)
