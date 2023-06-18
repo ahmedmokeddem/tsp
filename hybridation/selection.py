@@ -1,4 +1,3 @@
-from typing import List
 import random
 
 #For all functions population : List[List[List[int],int]] , N:int -> List[List[List[int],int]]
