@@ -38,7 +38,11 @@ def load_benchmark(file_name):
 
 
 
+
+
+# Line plot :  Performances variation as function of one paramter  
 def plot_line(x,y,xlabel,ylabel,title,pngfile,show = False):
+    plt.clf()
     plt.plot(x, y)
     plt.title(title)
     plt.xlabel(xlabel)
@@ -47,10 +51,7 @@ def plot_line(x,y,xlabel,ylabel,title,pngfile,show = False):
     if(show):
         plt.show()
 
-
-# Line plot :  Performances variation as function of one paramter  
-
-def test_RD(
+def test_RD_plot_line(
         benchmarks ,  # List of benchmarks to test on 
         params, # Parameters values 
         file_name ,
@@ -95,7 +96,7 @@ def test_RD(
                 continue
             
             transform_garph(G, True)
-            print(f" Benchmark :  {(bench_name,bench_size,bench_opt)} : ")
+            print(f"\n Benchmark :  {(bench_name,bench_size,bench_opt)} : ")
             
             plot_data[bench_name] = {
                 "x" : [],
@@ -104,8 +105,8 @@ def test_RD(
 
             for combination in combinations:
                 (N,delta,y,alpha,beta,nb_iteration,algo_generation,initialTemperature,coolingRate,nbIterationsRS,nbIterationsHC,nbIterationsCooling,selectionAlgorithme) = combination
+                print("      Params : ",end =' ')
                 print((N,delta,y,alpha,beta,nb_iteration,algo_generation.__name__,initialTemperature,coolingRate,nbIterationsRS,nbIterationsHC,nbIterationsCooling,selectionAlgorithme.__name__))     
-                
                 cumul_time = 0
                 cumul_result = 0
                 min_result = INF 
@@ -150,6 +151,10 @@ def test_RD(
                 else:
                     plot_data[bench_name]["x"].append(locals()[param_name])
                 plot_data[bench_name]["y"].append(avg_perc)
+
+                print("      Results : ",end=' ')
+                print((avg_result,avg_time,avg_perc))
+                print(" ")
             
             # ? Plotting for the benchmark 
             if(plot):
@@ -162,52 +167,39 @@ def test_RD(
     return 
 
 
-# Contour Plot   :  evolution of two parameters 
 
 
-BENCHMARKS_NAMES  = []
+BENCHMARKS_NAMES  = ["ftv33","ftv38","ftv44","ftv47","ft53","ftv55","ftv70","ftv90","ftv170","rbg443","rbg403","rbg358","rbg323","kro124p","ftv170"]
+SELECTION_METHODS = [SEL_ROULETTE,SEL_RANKING,SEL_ELITISTE,SEL_TOURNAMENT,SEL_RANDOM]
+#! SEL_RANDOM : not working correctly 
+# -AVG_DELTA/math.log(p)
+AVG_DELTA = {
+    "krop124p": 4500,
+    "ftv170":500
+}
+
 
 
 if  __name__ == "__main__" :
-    benchmarks = ["ftv33","ftv38","ftv44","ftv47","ft53","ftv55","ftv70","ftv90","ftv170"]
+    
+    benchmarks = ["rbg443"]
     params = {
-            "N" : [50,100],          # Population size 
-            "delta" : [0.4],       # Percentage of males  
-            "y"  : [0.3],              # Percentage of commanders
-            "alpha" : [0.5],          # Percentage of crossover within the harem 
-            "beta": [0.3],           # Percentage of crossover with others the harem 
-            "nb_iteration" : [200],   # Number of iterations  
+            "N" : [100],          # Population size 
+            "delta" : [0.25],       # Percentage of males  
+            "y"  : [0.7],              # Percentage of commanders
+            "alpha" : [0.7],          # Percentage of crossover within the harem 
+            "beta": [0.5],           # Percentage of crossover with others the harem 
+            "nb_iteration" : [600],   # Number of iterations  
             "algo_generation" : [PPV],  # Algo of generation of initiale solution 
-            "initialTemperature" : [1150],  # RS Param : initiale Temperature 
+            "initialTemperature" : [2000],  # RS Param : initiale Temperature 
             "coolingRate" : [0.92],        # RS Param :  cooling rate
-            "nbIterationsRS":[200],    # RS Param : number of iterations 
-            "nbIterationsHC": [200],    # Number of itertions Hill climbing 
+            "nbIterationsRS":[400],    # RS Param : number of iterations 
+            "nbIterationsHC": [100],    # Number of itertions Hill climbing 
             "nbIterationsCooling" : [1],  # RS Param : Number of itertion with the same cooling rate 
             "selectionAlgorithme" : [SEL_ELITISTE], # Selection algorithm
     }
 
-    test_RD(benchmarks,params,'./results/RD_test_ouss.csv',1,"N",True,'./results/RD_test_ouss_plot')
-
-
-
-
-
-
-
-
-
-    # benchmark = "ft53"
-    # p_values = [0.66 for i in range(50)]
-    # values_cooling_rate = [ 0.65]
-    # values_initial_temperature = [-AVG_DELTA/math.log(p) for p in p_values]
-    # values_num_iteration =[200000]
-    # values_nb_iterations_cooling =[1]
-
-
-    # #! change file name 
-    # filename = './results/ouss/Opt_test_rand.csv'
-    # test_RS(benchmark,values_initial_temperature, values_cooling_rate, values_num_iteration, values_nb_iterations_cooling ,filename,nb_executions=5)
-    # # plot_line('NB Iterations','average %',filename,'./results/ouss/plots/Test_NB_iter_0.66_0.65.png')
-    # # contour_plot('Initiale Temperature','Cooling Rate','average %',filename,'./results/ouss/plots/Step1_test_8.png')
-
-
+    #? For a line plot (perfs = f(param_name)) 
+    #? Only the concerned param should have multpile values , other parameters must have a single value in the params object 
+    test_RD_plot_line(benchmarks,params,file_name = './results/RD_test_ouss2.csv',nb_executions = 1,
+            param_name = "N",plot = False,plot_name='./results/RD_test_ouss2_plot')
