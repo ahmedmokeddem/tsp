@@ -160,14 +160,20 @@ def RED_DEERS_RS(
             tmp = []
             for j in range(round(population[i][1] * Nb_hinds / sum_p)):
                 if hinds_restant != 0:
-                    hind_num = random.randint(0, hinds_restant-1)
+                    if(hinds_restant>1):
+                        hind_num = random.randint(0, hinds_restant-1)
+                    else:
+                        hind_num=0
                     tmp.append(tmp_population[Nb_males + hind_num])
                     del tmp_population[Nb_males + hind_num]
                     hinds_restant = hinds_restant - 1
             harems.append(tmp)
         while hinds_restant != 0:
             for i in range(Nb_commanders):
-                hind_num = random.randint(0, hinds_restant-1)
+                if(hinds_restant>1):
+                        hind_num = random.randint(0, hinds_restant-1)
+                else:
+                        hind_num=0
                 harems[i].append(population[Nb_males + hind_num])
                 hinds_restant -= 1
                 if (hinds_restant == 0):
@@ -183,7 +189,10 @@ def RED_DEERS_RS(
             hinds_restant = len(harems[i])
             # Mate commander of a harem with a percent of hinds in his harem
             for j in range(round(len(harems[i])*alpha)):
-                hind_num = random.randint(0, hinds_restant-1)
+                if(hinds_restant>1):
+                    hind_num = random.randint(0, hinds_restant-1)
+                else:
+                    hind_num=0
                 new_deer = mate(population[i][0], tmp_harems[hind_num][0])
                 population.append([new_deer, calc_path_cost(graph, new_deer)])
                 hinds_restant = hinds_restant - 1
@@ -197,7 +206,10 @@ def RED_DEERS_RS(
                 tmp_harems = harems[other_harem].copy()
                 hinds_restant = len(harems[other_harem])
                 for j in range(round(len(harems[other_harem])*beta)):
-                    hind_num = random.randint(0, hinds_restant-1)
+                    if(hinds_restant>1):
+                        hind_num = random.randint(0, hinds_restant-1)
+                    else:
+                        hind_num=0
                     new_deer = mate(population[i][0], tmp_harems[hind_num][0])
                     population.append(
                         [new_deer, calc_path_cost(graph, new_deer)])
