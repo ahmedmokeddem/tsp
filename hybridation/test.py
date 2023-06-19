@@ -182,17 +182,18 @@ AVG_DELTA = {
 
 if  __name__ == "__main__" :
     
-    benchmarks = ["rbg443","rbg403","rbg358","rbg323","kro124p","ftv170"]
+    benchmarks = ["ftv33","ftv38","ftv47","ftv70","ftv90","rbg443","rbg403","kro124p","ftv170"]
+
     params = {
             "N" : [100],          # Population size 
-            "delta" : [0.25],       # Percentage of males  
+            "delta" : [0.4],       # Percentage of males 
             "y"  : [0.7],              # Percentage of commanders
-            "alpha" : [0.7],          # Percentage of crossover within the harem 
-            "beta": [0.5],           # Percentage of crossover with others the harem 
-            "nb_iteration" : [500],   # Number of iterations  
+            "alpha" : [0.833],          # Percentage of crossover within the harem 
+            "beta": [0.4],           # Percentage of crossover with others the harem 
+            "nb_iteration" : [40],   # Number of iterations  
             "algo_generation" : [RAI],  # Algo of generation of initiale solution 
-            "initialTemperature" : [10000],  # RS Param : initiale Temperature 
-            "coolingRate" : [0.92],        # RS Param :  cooling rate
+            "initialTemperature" : [1000],  # RS Param : initiale Temperature
+            "coolingRate" : [0.4],        # RS Param :  cooling rate
             "nbIterationsRS":[200],    # RS Param : number of iterations 
             "nbIterationsHC": [100],    # Number of itertions Hill climbing 
             "nbIterationsCooling" : [1],  # RS Param : Number of itertion with the same cooling rate 
@@ -201,5 +202,5 @@ if  __name__ == "__main__" :
 
     #? For a line plot (perfs = f(param_name)) 
     #? Only the concerned param should have multpile values , other parameters must have a single value in the params object 
-    test_RD_plot_line(benchmarks,params,file_name = './results/RD_test_ouss.csv',nb_executions = 1,
-            param_name = "N",plot = True,plot_name='./results/RD_test_ouss_plot')
+    test_RD_plot_line(benchmarks,params,file_name = './results/RD_test_final.csv',nb_executions = 5,
+            param_name = "delta",plot = False,plot_name='./results/RD_test_plot')
