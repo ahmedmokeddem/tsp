@@ -6,6 +6,7 @@ from PPV import PPV
 from NI import NI
 from RAI import RAI
 from CI import CI
+from RAI import RAI
 from math import floor
 from selection import *
 import random

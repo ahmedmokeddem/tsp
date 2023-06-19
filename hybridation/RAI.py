@@ -5,7 +5,7 @@ INF = 99999999 #* math.inf
 
 
 #? Randomized insertion heuristic 
-def RAI(G,run_times=1):
+def RAI(G,run_times=0):
     """
         G : Asymetric graph 
     """
@@ -46,6 +46,7 @@ def RAI(G,run_times=1):
     # print(f"Initialisation : {(opt_circuit,opt_cost)}")
 
     if run_times==0:
+        opt_circuit.append(opt_circuit[0])
         return opt_circuit,opt_cost
 
     #? Optimization of the initiale circuit 

@@ -1,2 +1,0 @@
-Benchmark name,N,delta,y,alpha,beta,nb_iteration,algo_generation,initialTemperature,coolingRate,nbIterationsRS,nbIterationsHC,nbIterationsCooling,selectionAlgorithme,Average %,Min result,NB opt,Average execution time (s)
-ftv170,100,0.25,0.7,0.7,0.5,600,PPV,1500,0.92,1000,100,1,SEL_ELITISTE,33.212,3670,0,379.4483
