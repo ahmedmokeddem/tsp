@@ -6,7 +6,6 @@ from PPV import PPV
 from NI import NI
 from RAI import RAI
 from CI import CI
-from RAI import RAI
 from math import floor
 from selection import *
 import random
@@ -41,32 +40,51 @@ def mate(
         hind: List[int]
 ):
     mask = [random.randint(0, 1) for i in range(len(stag)-2)]
-    new_deer = []
-    changed = []
-    new = []
-    original = []
+    new_deer1 = []
+    new_deer2 = []
+    changed1 = []
+    changed2 = []
+    new1 = []
+    original1 = []
+    new2 = []
+    original2 = []
 
-    new_deer.append(hind[0])
+    new_deer1.append(hind[0])
+    new_deer2.append(hind[0])
     for i in range(len(mask)):
         if mask[i]:
-            new_deer.append(hind[i+1])
+            new_deer1.append(hind[i+1])
+            new_deer2.append(stag[i+1])
+            new2.append(stag[i+1])
+            original2.append(hind[i+1])
         else:
-            new_deer.append(stag[i+1])
-            new.append(stag[i+1])
-            original.append(hind[i+1])
-    new_deer.append(hind[-1])
+            new_deer1.append(stag[i+1])
+            new_deer2.append(hind[i+1])
+            new1.append(stag[i+1])
+            original1.append(hind[i+1])
+    new_deer1.append(hind[-1])
+    new_deer2.append(stag[-1])
 
-    changed = [x for x in original if x not in new]
+    changed1 = [x for x in original1 if x not in new1]
+    changed2 = [x for x in original2 if x not in new2]
     start = 1
-    for i in changed:
-        for j in new_deer[start:-1]:
-            if j == new_deer[0] or new_deer.count(j) == 2:
-                index = new_deer[start:-1].index(j)
-                new_deer[start + index] = i
+    for i in changed1:
+        for j in new_deer1[start:-1]:
+            if j == new_deer1[0] or new_deer1.count(j) == 2:
+                index = new_deer1[start:-1].index(j)
+                new_deer1[start + index] = i
                 start = start + index + 1
                 break
 
-    return new_deer
+    for i in changed2:
+        for j in new_deer2[start:-1]:
+            if j == new_deer2[0] or new_deer2.count(j) == 2:
+                index = new_deer2[start:-1].index(j)
+                new_deer2[start + index] = i
+                start = start + index + 1
+                break
+
+    return new_deer1, new_deer2
 
 
 def RED_DEERS_RS(
@@ -190,11 +208,15 @@ def RED_DEERS_RS(
             # Mate commander of a harem with a percent of hinds in his harem
             for j in range(round(len(harems[i])*alpha)):
                 if(hinds_restant>1):
-                    hind_num = random.randint(0, hinds_restant-1)
+                        hind_num = random.randint(0, hinds_restant-1)
                 else:
-                    hind_num=0
-                new_deer = mate(population[i][0], tmp_harems[hind_num][0])
-                population.append([new_deer, calc_path_cost(graph, new_deer)])
+                        hind_num=0
+                new_deer1, new_deer2 = mate(
+                    population[i][0], tmp_harems[hind_num][0])
+                population.append(
+                    [new_deer1, calc_path_cost(graph, new_deer1)])
+                population.append(
+                    [new_deer2, calc_path_cost(graph, new_deer2)])
                 hinds_restant = hinds_restant - 1
                 del tmp_harems[hind_num]
 
@@ -210,9 +232,12 @@ def RED_DEERS_RS(
                     hind_num = random.randint(0, hinds_restant-1)
                 else:
                     hind_num=0
-                new_deer = mate(population[i][0], tmp_harems[hind_num][0])
+                new_deer1, new_deer2 = mate(
+                    population[i][0], tmp_harems[hind_num][0])
                 population.append(
-                    [new_deer, calc_path_cost(graph, new_deer)])
+                    [new_deer1, calc_path_cost(graph, new_deer1)])
+                population.append(
+                    [new_deer2, calc_path_cost(graph, new_deer2)])
                 hinds_restant = hinds_restant - 1
                 del tmp_harems[hind_num]
 
@@ -228,8 +253,9 @@ def RED_DEERS_RS(
                     nearest_hind = population[Nb_males + j].copy()
                     resemblance = new_resemblance
 
-            new_deer = mate(population[i][0], nearest_hind[0])
-            population.append([new_deer, calc_path_cost(graph, new_deer)])
+            new_deer1, new_deer2 = mate(population[i][0], nearest_hind[0])
+            population.append([new_deer1, calc_path_cost(graph, new_deer1)])
+            population.append([new_deer2, calc_path_cost(graph, new_deer2)])
 
         # print_pop(population)
         # print()
